@@ -14,6 +14,7 @@
 		B2784EC2267F47B800EBF835 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2784EC1267F47B800EBF835 /* Assets.xcassets */; };
 		B2784EC5267F47B800EBF835 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2784EC4267F47B800EBF835 /* Preview Assets.xcassets */; };
 		B2784EC8267F47B800EBF835 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B2784EC6267F47B800EBF835 /* LaunchScreen.storyboard */; };
+		B2784ED1267F5AB200EBF835 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2784ED0267F5AB200EBF835 /* Model.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		B2784EC4267F47B800EBF835 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		B2784EC7267F47B800EBF835 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B2784EC9267F47B800EBF835 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B2784ED0267F5AB200EBF835 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				B2784EC9267F47B800EBF835 /* Info.plist */,
 				B2784EBE267F47B600EBF835 /* twich_game_bar.xcdatamodeld */,
 				B2784EC3267F47B800EBF835 /* Preview Content */,
+				B2784ED0267F5AB200EBF835 /* Model.swift */,
 			);
 			path = twich_game_bar;
 			sourceTree = "<group>";
@@ -148,6 +151,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2784ED1267F5AB200EBF835 /* Model.swift in Sources */,
 				B2784EB9267F47B500EBF835 /* AppDelegate.swift in Sources */,
 				B2784EBB267F47B500EBF835 /* SceneDelegate.swift in Sources */,
 				B2784EBD267F47B500EBF835 /* ContentView.swift in Sources */,

@@ -6,38 +6,70 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct ContentView: View {
   
     var body: some View {
-        NavigationView {
+        NavigationView{
             GamesView()
-                .navigationTitle("Games")
         }
     }
 }
 
 struct GamesView: View {
-    @ObservedObject var listData = getData()
+    @StateObject var listData = getData()
+    @Environment(\.managedObjectContext) var context
+    
+    @FetchRequest(entity: GameTable.entity(), sortDescriptors: [NSSortDescriptor(keyPath:\GameTable.name, ascending: true)]) var results : FetchedResults<GameTable>
+    
     var body: some View {
-        List(0..<listData.data.count, id: \.self) { i in
-            if i == listData.data.count - 1 {
-                cellView(data: listData.data[i], isLast: true, listData:listData)
-            } else {
-                cellView(data: listData.data[i], isLast: false, listData:  listData)
+        
+        VStack {
+            if listData.data.isEmpty {
+                ProgressView()
+                    .onAppear(perform: {
+                        listData.fetchData(context: context)
+                    })
+                    
             }
-            
-
-
+            else {
+                        List(0..<listData.data.count, id: \.self) { i in
+                            if i == listData.data.count - 1 {
+                                cellView(data: listData.data[i], isLast: true, listData:listData)
+                            } else {
+                                cellView(data: listData.data[i], isLast: false, listData:  listData)
+                            }
+                
+                
+                
+                        }.listStyle(InsetGroupedListStyle())
+            }
         }
+        .navigationTitle("Games")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing ) {
+                
+                Button(action: {
+                    //just to make refresh visibale
+                    listData.data.removeAll()
+                },
+                       label:{
+                        Image(systemName: "arrow.clockwise.circle").font(.title)
+                       })
+            }
+        }
+
    }
-   // var body: some View { Text("test") }
+    
 }
 
 struct cellView: View {
     var data: Top
     var isLast: Bool
     @ObservedObject var listData: getData
+    @Environment(\.managedObjectContext) var context
     var body: some View{
         VStack(alignment: .leading, spacing: 10) {
             Text(data.game.name).fontWeight(.bold)
@@ -49,7 +81,7 @@ struct cellView: View {
                         //need to downloed
                         print("loading data")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            listData.updateDate()
+                            listData.fetchData(context: context)
                         }
                         
                     }
@@ -70,10 +102,27 @@ class getData: ObservableObject {
     
     init() {
         print("Starting")
-        updateDate()
+//        fetchData()
     }
     
-    func updateDate() {
+    func saveData(context: NSManagedObjectContext) {
+        
+        data.forEach{(data) in
+            let entity = GameTable(context: context)
+            entity.channels = Int32(Int16(data.channels))
+            entity.id = Int32(data.game._id)
+            entity.name = data.game.name
+        }
+        
+        do {
+            try context.save()
+        }
+        catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func fetchData(context: NSManagedObjectContext) {
         
         let url = URL(string: "https://api.twitch.tv/kraken/games/top?limit=\(limit)&offset\(limit - 10)")!
         var request = URLRequest(url: url)
@@ -97,6 +146,7 @@ class getData: ObservableObject {
                 DispatchQueue.main.async {
                     self.data = oldData + json.top
                     self.limit += 10
+                    self.saveData(context: context)
                 }
             }
             catch{
@@ -104,7 +154,11 @@ class getData: ObservableObject {
             }
         }.resume()
     }
+    
+    
 }
+
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

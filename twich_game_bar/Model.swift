@@ -12,13 +12,13 @@ struct Response: Decodable {
 }
 
 
-struct Top: Decodable {
+struct Top: Decodable, Hashable {
     var game: Game
     var viewers: Int
     var channels: Int
 }
 
-struct Game:Decodable {
+struct Game:Decodable, Hashable {
     var _id: Int
     var name: String
 }
